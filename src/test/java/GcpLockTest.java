@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Google Inc.
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@
 import java.util.concurrent.TimeUnit;
 
 public class GcpLockTest {
+    private static String LOCK_NAME = "lock";
 
     public static void main(String[] args) {
+        // testLock("swast-scratch", 5);
         testLock("my-test-bucket-nnene", 5);
     }
 
@@ -31,10 +33,12 @@ public class GcpLockTest {
          * @param timeout number of seconds to attempt to lock/unlock resource
          */
 
-        try (GcpLock gcpLock1 = new GcpLock(bucketName, timeout)) {
+        GcpLockFactory lockFactory = new GcpLockFactory(bucketName);
+
+        try (GcpLock gcpLock1 = lockFactory.createLock(LOCK_NAME, timeout, TimeUnit.SECONDS)) {
             TimeUnit.SECONDS.sleep(3); // Do work
             // Following requests for locking should be time out since resource is still locked
-            try (GcpLock gcpLock2 = new GcpLock(bucketName, timeout)) {
+            try (GcpLock gcpLock2 = lockFactory.createLock(LOCK_NAME, timeout, TimeUnit.SECONDS)) {
                 TimeUnit.SECONDS.sleep(3); // Do work
                 System.err.println("Test lock failed.");
             } catch (Exception e) {

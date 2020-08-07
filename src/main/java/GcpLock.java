@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Google Inc.
+ * Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,21 @@ import java.util.concurrent.TimeUnit;
 
 public class GcpLock implements AutoCloseable {
 
-    private String bucketName;
-    private Storage storage = StorageOptions.getDefaultInstance().getService();
+    private final String bucketName;
+    private final String blobName;
+    private final Storage storage;
     private long timeout;
 
-    public GcpLock(String bucket, long time) throws InterruptedException {
+    public GcpLock(Storage storage, String bucket, String blob, long time, TimeUnit unit) throws InterruptedException {
         /**
          * Default constructor to initialize lock.
          * @param bucket Name of the bucket where the lock file will be written
          * @param time Number of seconds to wait to acquire a lock
          */
-        bucketName = bucket;
-        timeout = TimeUnit.NANOSECONDS.convert(time, TimeUnit.SECONDS);
+        this.bucketName = bucket;
+        this.blobName = blob;
+        this.storage = storage;
+        this.timeout = TimeUnit.NANOSECONDS.convert(time, unit);
         lock();
     }
 
@@ -44,7 +47,6 @@ public class GcpLock implements AutoCloseable {
         long startTime = System.nanoTime();
         while (true) {
             try {
-                String blobName = "lock";
                 BlobId blobId = BlobId.of(bucketName, blobName);
                 BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
                 Storage.BlobTargetOption blobOption = Storage.BlobTargetOption.doesNotExist();

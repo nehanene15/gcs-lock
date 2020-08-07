@@ -16,17 +16,18 @@
 
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+
 import java.util.concurrent.TimeUnit;
 
 public class GcpLockFactory {
-  private final String bucketName;
-  private final Storage storage = StorageOptions.getDefaultInstance().getService();
+    private final String bucketName;
+    private final Storage storage = StorageOptions.getDefaultInstance().getService();
 
-  public GcpLockFactory(String bucket) {
-    this.bucketName = bucket;
-  }
+    public GcpLockFactory(String bucket) {
+        this.bucketName = bucket;
+    }
 
-  public GcpLock createLock(String blob, long timeout, TimeUnit unit) throws InterruptedException {
-    return new GcpLock(storage, bucketName, blob, timeout, unit);
-  }
+    public GcpLock createLock(String blob, long timeout, TimeUnit unit) throws InterruptedException {
+        return new GcpLock(storage, bucketName, blob, timeout, unit);
+    }
 }

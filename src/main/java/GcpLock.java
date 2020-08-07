@@ -28,8 +28,11 @@ public class GcpLock implements AutoCloseable {
     public GcpLock(Storage storage, String bucket, String blob, long time, TimeUnit unit) throws InterruptedException {
         /**
          * Default constructor to initialize lock.
+         * @param storage Storage interface for Google Cloud Storage
          * @param bucket Name of the bucket where the lock file will be written
+         * @param blob Name of lock object
          * @param time Number of seconds to wait to acquire a lock
+         * @param unit TimeUnit of timeout
          */
         this.bucketName = bucket;
         this.blobName = blob;

@@ -20,22 +20,23 @@ public class GcpLockTest {
     private static String LOCK_NAME = "lock";
 
     public static void main(String[] args) {
-        // testLock("swast-scratch", 5);
-        testLock("my-test-bucket-nnene", 5);
+        // testLock("swast-scratch", 5, TimeUnit.SECONDS);
+        testLock("my-test-bucket-nnene", 5, TimeUnit.SECONDS);
     }
 
-    public static void testLock(String bucketName, long timeout) {
+    public static void testLock(String bucketName, long timeout, TimeUnit unit) {
         /**
          * Tests lock integrity. The method acquires one lock and then initiates another
          * request for a lock without unlocking the first. The second request should time out.
          *
          * @param bucketName name of bucket where lock file will reside
          * @param timeout number of seconds to attempt to lock/unlock resource
+         * @param unit TimeUnit of timeout
          */
 
         GcpLockFactory lockFactory = new GcpLockFactory(bucketName);
 
-        try (GcpLock gcpLock1 = lockFactory.createLock(LOCK_NAME, timeout, TimeUnit.SECONDS)) {
+        try (GcpLock gcpLock1 = lockFactory.createLock(LOCK_NAME, timeout, unit)) {
             TimeUnit.SECONDS.sleep(3); // Do work
             // Following requests for locking should be time out since resource is still locked
             try (GcpLock gcpLock2 = lockFactory.createLock(LOCK_NAME, timeout, TimeUnit.SECONDS)) {

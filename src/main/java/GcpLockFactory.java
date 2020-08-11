@@ -29,7 +29,7 @@ public class GcpLockFactory {
 
     public GcpLock createLock(String blob, long timeout, TimeUnit unit) throws InterruptedException {
         /**
-         * Default constructor to create lock.
+         * Method to create lock.
          * @param blob name of lock file
          * @param timeout Time to wait to acquire a lock
          * @param unit TimeUnit of timeout

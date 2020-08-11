@@ -13,9 +13,9 @@ See [this](https://github.com/marcacohen/gcslock) GitHub repository for a [Go](h
 ```java
 GcpLockFactory lockFactory = new GcpLockFactory(bucketName);
 try (GcpLock gcpLock1 = lockFactory.createLock(lockName, timeout, unit)) {
-            // Do protected work here
+    // Do protected work here
 } catch (InterruptedException e) {
-            e.printStackTrace();
+    e.printStackTrace();
 }
 ```
 

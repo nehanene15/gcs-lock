@@ -16,7 +16,6 @@
 
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-
 import java.util.concurrent.TimeUnit;
 
 public class GcpLockFactory {
@@ -27,13 +26,14 @@ public class GcpLockFactory {
         this.bucketName = bucket;
     }
 
+    /**
+     * Method to create lock.
+     *
+     * @param blob name of lock file
+     * @param timeout Time to wait to acquire a lock
+     * @param unit TimeUnit of timeout
+     */
     public GcpLock createLock(String blob, long timeout, TimeUnit unit) throws InterruptedException {
-        /**
-         * Method to create lock.
-         * @param blob name of lock file
-         * @param timeout Time to wait to acquire a lock
-         * @param unit TimeUnit of timeout
-         */
         return new GcpLock(storage, bucketName, blob, timeout, unit);
     }
 }
